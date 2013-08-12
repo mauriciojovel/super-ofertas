@@ -19,15 +19,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import com.madXdesign.superofertas.constant.SuperSelectoXML;
 import com.madXdesign.superofertas.constant.TAG;
 
 public class SelectosParserXML 
-		extends AsyncTask<String, Void, List<SelectosParserXML.Categoria>> 
 		implements Serializable {
 
 	/**
@@ -36,44 +33,36 @@ public class SelectosParserXML
 	private static final long serialVersionUID = 1L;
 	
 	private URL urlXML;
-	private Document document;
-	private ArrayAdapter<Categoria> adapter;
-	
-	@Override
-	protected List<Categoria> doInBackground(String... params) {
-		SelectosParserXML p = new SelectosParserXML(params[0]);
-		return p.findAllCategorias();
-	}
-	
-	public SelectosParserXML(ArrayAdapter<Categoria> a) {
-		this.adapter = a;
-	}
+	private DocumentBuilder documentBuilder;
+	private static Document document;
 	
 	public SelectosParserXML(String urlXML) {
-		super();
 		try {
-			this.urlXML = new URL(urlXML);
-			DocumentBuilderFactory factory = 
-										DocumentBuilderFactory.newInstance();
-			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-			document = documentBuilder.parse(getInputStream());
+			if (this.urlXML == null) {
+                this.urlXML = new URL(urlXML);
+                DocumentBuilderFactory factory = DocumentBuilderFactory
+                        .newInstance();
+                documentBuilder = factory.newDocumentBuilder();
+                //document = getDocument();
+            }
 		} catch (MalformedURLException e) {
 			Log.e(TAG.XML, "Error al generar la clase con la url " + urlXML, e);
 		} catch (ParserConfigurationException e) {
 			Log.e(TAG.XML, "Error de mal formado xml " + urlXML, e);
-		} catch (SAXException e) {
-			Log.e(TAG.XML, "Error de mal formado xml " + urlXML, e);
-		} catch (IOException e) {
-			Log.e(TAG.XML, "No se pudo leer el xml " + urlXML, e);
 		}
 	}
 	
-	@Override
-	protected void onPostExecute(List<Categoria> result) {
-		super.onPostExecute(result);
-		adapter.clear();
-		adapter.addAll(result);
-		adapter.notifyDataSetChanged();
+	private Document getDocument() {
+	    if(document == null) {
+	        try {
+                document = documentBuilder.parse(getInputStream());
+            } catch (SAXException e) {
+                Log.e(TAG.XML, "Error de mal formado xml " + urlXML, e);
+            } catch (IOException e) {
+                Log.e(TAG.XML, "No se pudo leer el xml " + urlXML, e);
+            }
+	    }
+	    return document;
 	}
 	
 	private InputStream getInputStream() {
@@ -93,11 +82,11 @@ public class SelectosParserXML
 	public List<Categoria> findAllCategorias() {
 		ArrayList<Categoria> categorias = 
 				new ArrayList<SelectosParserXML.Categoria>();
-		Element root = document.getDocumentElement();
+		Element root = getDocument().getDocumentElement();
 		NodeList categoriasNodes = root.getElementsByTagName(
 								SuperSelectoXML.CATEGORIAS_NODE);
 		if(categoriasNodes.getLength() > 0) {
-			//Lista de categorias.
+			//Lista de categorias
 			NodeList categoriasNode = categoriasNodes.item(0).getChildNodes();
 			for (int i = 0; i < categoriasNode.getLength(); i++) {
 				Node categoria = categoriasNode.item(i);
@@ -106,13 +95,13 @@ public class SelectosParserXML
 				for (int j = 0; j < datosCategoria.getLength(); j++) {
 					Node dat = datosCategoria.item(j);
 					if(dat.getNodeName().equals(SuperSelectoXML.NOMBRE_NODE)) {
-						cat.setNombre(dat.getFirstChild().getNodeValue());
+						cat.setNombre(getText(dat));
 					} else if(dat.getNodeName()
 								.equals(SuperSelectoXML.CANTIDAD_NODE)) {
-						cat.setCantidad(Integer.parseInt(dat.getFirstChild().getNodeValue()));
+						cat.setCantidad(Integer.parseInt(getText(dat)));
 					} else if(dat.getNodeName()
 								.equals(SuperSelectoXML.ICONO_NODE)) {
-						cat.setIcono(dat.getFirstChild().getNodeValue());
+						cat.setIcono(getText(dat));
 					}
 				}
 				if(datosCategoria.getLength() > 0) {
@@ -127,7 +116,7 @@ public class SelectosParserXML
 		ArrayList<Oferta> ofertasList = 
 				new ArrayList<SelectosParserXML.Oferta>();
 		
-		Element root = document.getDocumentElement();
+		Element root = getDocument().getDocumentElement();
 		NodeList categoriasNodes = root.getElementsByTagName(
 				SuperSelectoXML.CATEGORIAS_NODE);
 		boolean searchCategoria = categoria != null 
@@ -142,7 +131,7 @@ public class SelectosParserXML
 					Node dat = datCatNodes.item(j);
 					if(dat.getNodeName().equals(SuperSelectoXML.NOMBRE_NODE)) {
 						if(searchCategoria 
-								&& !dat.getNodeValue().equals(categoria)) {
+								&& !getText(dat).equals(categoria)) {
 							break;
 						}
 					} else if(dat.getNodeName().equals(
@@ -150,15 +139,38 @@ public class SelectosParserXML
 						NodeList ofertasNodeList = dat.getChildNodes();
 						for (int k = 0; k < ofertasNodeList.getLength(); k++) {
 							Oferta oferta = new Oferta();
-							Node ofertaData = ofertasNodeList.item(k)
-															.getFirstChild();
-							while(ofertaData != null) {
-								if(ofertaData.getNodeValue()
-										.equals(SuperSelectoXML.TITULO_NODE)) {
-									oferta.setTitulo(ofertaData.getNodeValue());
-								}
+							Node ofertaData = ofertasNodeList.item(k);
+							NodeList ofertaDataNodeList = 
+							                        ofertaData.getChildNodes();
+							for (int l = 0; l < ofertaDataNodeList.getLength();
+							        l++) {
+							    Node ofertaDataNode =ofertaDataNodeList.item(l);
+							    if(ofertaDataNode.getNodeName()
+	                                    .equals(SuperSelectoXML.TITULO_NODE)) {
+	                                oferta.setTitulo(getText(ofertaDataNode));
+	                            } else if(ofertaDataNode.getNodeName().equals(
+	                                    SuperSelectoXML.PRECIO_OFERTA_NODE)) {
+	                                oferta.setPrecioOferta(
+	                                        Double.parseDouble(
+	                                                getText(ofertaDataNode)));
+	                            } else if(ofertaDataNode.getNodeName().equals(
+	                                    SuperSelectoXML.PRECIO_NORMAL_NODE)) {
+                                    oferta.setPrecionNormal(Double.parseDouble(
+                                            getText(ofertaDataNode)));
+                                } else if(ofertaDataNode.getNodeName().equals(
+                                        SuperSelectoXML.AHORRO_NODE)) {
+                                    oferta.setAhorro(Double.parseDouble(
+                                            getText(ofertaDataNode)));
+                                }else if(ofertaDataNode.getNodeName().equals(
+                                        SuperSelectoXML.DESCUENTO_NODE)) {
+                                    oferta.setDescuento(Double.parseDouble(
+                                            getText(ofertaDataNode)));
+                                } 
+                            }
+							if(ofertaDataNodeList.getLength()>0) {
+							    ofertasList.add(oferta);
 							}
-							ofertasList.add(oferta);
+							
 						}
 					}
 					
@@ -168,6 +180,15 @@ public class SelectosParserXML
 		}
 		
 		return ofertasList;
+	}
+	
+	public String getText(Node node) {
+	    StringBuilder builder = new StringBuilder();
+	    NodeList fragemtos = node.getChildNodes();
+	    for (int i = 0; i < fragemtos.getLength(); i++) {
+            builder.append(fragemtos.item(i).getNodeValue());
+        }
+	    return builder.toString();
 	}
 	
 	public class Categoria implements Serializable {
@@ -304,6 +325,20 @@ public class SelectosParserXML
 		}
 		public void setFechaVencimiento(Date fechaVencimiento) {
 			this.fechaVencimiento = fechaVencimiento;
+		}
+		
+		public int getPorcentajeDescuento() {
+		    if(precionNormal != 0) {
+		        return (int)((1-(precioOferta/precionNormal))*100);
+		    } else {
+		        return 0;
+		    }
+		}
+		
+		@Override
+		public String toString() {
+		    return titulo+" "+precioOferta+" "+" "+precionNormal
+		            +" "+ahorro+" "+getPorcentajeDescuento()+"%";
 		}
 	}
 

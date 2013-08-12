@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -15,6 +15,36 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+    <style name="titulo" parent="AppTheme">
+        <item name="android:textSize">@dimen/text_medium_size</item>
+        <item name="android:paddingLeft">@dimen/micro_padding</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="alineadoDerecha" parent="AppTheme">
+        <item name="android:gravity">right</item>
+    </style>
+    
+    <style name="textoMedioDerecha" parent="alineadoDerecha">
+        <item name="android:textSize">@dimen/text_medium_size</item>
+        <item name="android:textColor">@color/verde</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:paddingRight">@dimen/micro_padding</item>
+    </style>
+    
+    <style name="textoPequenio" parent="AppTheme">
+        <item name="android:textSize">@dimen/text_micro_size</item>
+    </style>
+    
+    <style name="etiqueta" parent="textoPequenio">
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">@dimen/micro_padding</item>
+    </style>
+    
+    <style name="textoPequenioDerecha" parent="textoPequenio">
+        <item name="android:paddingLeft">@dimen/micro_padding</item>
     </style>
 
 </resources>

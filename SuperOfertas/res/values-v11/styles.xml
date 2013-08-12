@@ -6,6 +6,13 @@
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!-- API 11 theme customizations can go here. -->
+        <item name="android:actionBarStyle">@style/ActionBar</item>
     </style>
-
+    
+    <style name="ActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:spinnerDropDownItemStyle">@style/ActionBarTitleStyle</item>
+    </style>
+     <style name="ActionBarTitleStyle">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>
