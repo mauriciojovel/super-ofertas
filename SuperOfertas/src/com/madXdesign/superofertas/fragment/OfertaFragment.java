@@ -30,11 +30,17 @@ public class OfertaFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		// creamos el adaptador
-		//parser = new SelectosOfertasTask("http://168.243.106.118/deals/index.php/api/deals?version=0", this);
 		setListAdapter(new OfertaAdapter(getActivity()));
 		setListShownNoAnimation(false);
-		//parser.execute();
-		setHasOptionsMenu(true);
+
+		boolean hasTwoPanel = getResources().getBoolean(R.bool.has_two_panes);
+		if(!hasTwoPanel) {
+			setHasOptionsMenu(true);
+		} else {
+			parser = new SelectosOfertasTask(getResources()
+					.getString(R.string.urlSS), this);
+			parser.execute();
+		}
 	}
 	
 	@Override
@@ -48,7 +54,8 @@ public class OfertaFragment extends ListFragment {
             final Spinner spinner = (Spinner) view;
             CustomArrayAdapter adapter = 
                     new CustomArrayAdapter(getActivity());
-            SelectosCategoriaTask task = new SelectosCategoriaTask("http://168.243.106.118/deals/index.php/api/deals?version=0", adapter);
+            SelectosCategoriaTask task = new SelectosCategoriaTask(
+            		getResources().getString(R.string.urlSS), adapter);
             task.execute();
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -56,15 +63,9 @@ public class OfertaFragment extends ListFragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view,
                         int position, long id) {
-                    Categoria a = (Categoria) spinner.getAdapter().getItem(position);
-                    setListShownNoAnimation(false);
-                    if(a.getNombre().equalsIgnoreCase("todos")) {
-                        parser = new SelectosOfertasTask("http://168.243.106.118/deals/index.php/api/deals?version=0", OfertaFragment.this);
-                        parser.execute();
-                    } else {
-                        parser = new SelectosOfertasTask("http://168.243.106.118/deals/index.php/api/deals?version=0", OfertaFragment.this);
-                        parser.execute(a.getNombre());
-                    }
+                    Categoria a = (Categoria) spinner.getAdapter()
+                    								.getItem(position);
+                    refreshList(a.getNombre());
                 }
 
                 @Override
@@ -72,6 +73,21 @@ public class OfertaFragment extends ListFragment {
                     
                 }
             });
+        }
+	}
+	
+	public void refreshList(String cat) {
+		setListShownNoAnimation(false);
+        if(cat.equalsIgnoreCase("todos")) {
+            parser = new SelectosOfertasTask(
+            		getResources().getString(R.string.urlSS)
+            		, OfertaFragment.this);
+            parser.execute();
+        } else {
+            parser = new SelectosOfertasTask(getResources()
+            		.getString(R.string.urlSS)
+            		, OfertaFragment.this);
+            parser.execute(cat);
         }
 	}
 	
