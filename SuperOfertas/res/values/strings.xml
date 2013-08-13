@@ -9,4 +9,5 @@
     <string name="oferta">Oferta</string>
     <string name="action_filter">Filtrar</string>
     <string name="urlSS">http://168.243.106.118/deals/index.php/api/deals?version=0</string>
+    <string name="ahorro">Ahorro</string>
 </resources>

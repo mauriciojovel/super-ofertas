@@ -37,10 +37,10 @@
 
             <TextView
                 android:id="@+id/textView2"
+                style="@style/etiqueta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/oferta" 
-                style="@style/etiqueta"/>
+                android:text="@string/ahorro" />
 
             <TextView
                 android:id="@+id/ahorroTxt"

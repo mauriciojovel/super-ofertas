@@ -46,5 +46,11 @@
     <style name="textoPequenioDerecha" parent="textoPequenio">
         <item name="android:paddingLeft">@dimen/micro_padding</item>
     </style>
+    
+    <style name="DropDownCompactBar">
+        <item name="android:padding">@dimen/micro_padding</item>
+        <item name="android:textColor">@color/negro</item>
+        <item name="android:textColorHighlight">@color/negro</item>
+    </style>
 
 </resources>

@@ -58,11 +58,15 @@ public class SelectosCategoriaTask extends AsyncTask<String, Void, List<Selectos
                                 = (ArrayAdapter<Object>) listener.getListAdapter();
             listener.setListShownNoAnimation(true);
             a.clear();
-            a.addAll(result);
+            for (Categoria categoria : result) {
+                a.add(categoria);
+            }
             a.notifyDataSetChanged();
         } else if(adapter != null) {
             adapter.clear();
-            adapter.addAll(result);
+            for (Categoria categoria : result) {
+                adapter.add(categoria);
+            }
             adapter.notifyDataSetChanged();
         }
     }

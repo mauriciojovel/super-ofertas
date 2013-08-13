@@ -45,7 +45,9 @@ public class SelectosOfertasTask extends AsyncTask<String, Void, List<Oferta>>
                             = (ArrayAdapter<Object>) listener.getListAdapter();
         listener.setListShownNoAnimation(true);
         a.clear();
-        a.addAll(result);
+        for (Oferta oferta : result) {
+            a.add(oferta);
+        }
         a.notifyDataSetChanged();
     }
 

@@ -3,6 +3,7 @@ package com.madXdesign.superofertas.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,7 +50,7 @@ public class OfertaFragment extends ListFragment {
 	    getActivity().getMenuInflater().inflate(R.menu.main, menu);
 	    MenuItem spinnerItem = null;
 	    spinnerItem = menu.findItem( R.id.action_filter);
-	    View view = spinnerItem.getActionView();
+	    View view = MenuItemCompat.getActionView(spinnerItem);
 	    if (view instanceof Spinner) {
             final Spinner spinner = (Spinner) view;
             CustomArrayAdapter adapter = 
