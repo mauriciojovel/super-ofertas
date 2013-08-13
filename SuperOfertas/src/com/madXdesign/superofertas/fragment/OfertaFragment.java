@@ -46,9 +46,8 @@ public class OfertaFragment extends ListFragment {
 	    View view = spinnerItem.getActionView();
 	    if (view instanceof Spinner) {
             final Spinner spinner = (Spinner) view;
-            ArrayAdapter<Categoria> adapter = 
-                    new ArrayAdapter<SelectosParserXML.Categoria>(getActivity()
-                            , android.R.layout.simple_list_item_1);
+            CustomArrayAdapter adapter = 
+                    new CustomArrayAdapter(getActivity());
             SelectosCategoriaTask task = new SelectosCategoriaTask("http://168.243.106.118/deals/index.php/api/deals?version=0", adapter);
             task.execute();
             spinner.setAdapter(adapter);
@@ -74,6 +73,22 @@ public class OfertaFragment extends ListFragment {
                 }
             });
         }
+	}
+	
+	class CustomArrayAdapter extends ArrayAdapter<SelectosParserXML.Categoria> {
+		public CustomArrayAdapter(Context context) {
+			super(context, R.layout.row_item_list,android.R.id.text1);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View item = null;
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+            item = inflater.inflate(R.layout.row_item_list, null);
+            ((TextView)item.findViewById(android.R.id.text1))
+            	.setText(getItem(position)+"");
+            return item;
+		}
 	}
 	
 	class OfertaAdapter extends ArrayAdapter<SelectosParserXML.Oferta> {
