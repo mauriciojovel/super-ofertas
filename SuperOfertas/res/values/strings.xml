@@ -12,4 +12,6 @@
     <string name="ahorro">Ahorro</string>
     <string name="carrito_compra">Carrito</string>
     <string name="no_hay_datos">No hay datos</string>
+    <string name="title_activity_producto"></string>
+
 </resources>
