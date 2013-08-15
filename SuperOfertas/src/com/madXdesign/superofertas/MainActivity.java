@@ -7,8 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.madXdesign.superofertas.fragment.OfertaFragment.OnClickOfertaListener;
+import com.madXdesign.superofertas.fragment.adapter.DepthPageTransformer;
 import com.madXdesign.superofertas.fragment.adapter.PagerAdapter;
-import com.madXdesign.superofertas.fragment.adapter.ZoomOutPageTransformer;
 import com.madXdesign.superofertas.xml.SelectosParserXML.Oferta;
 
 public class MainActivity extends ActionBarActivity 
@@ -22,7 +22,7 @@ public class MainActivity extends ActionBarActivity
 		pager.setAdapter(new PagerAdapter(
 		        getSupportFragmentManager()
 		        ,getResources().getBoolean(R.bool.has_two_panes)));
-		pager.setPageTransformer(true, new ZoomOutPageTransformer());
+		pager.setPageTransformer(true, new DepthPageTransformer());
 		setTitle("");
 	}
 	
