@@ -1,5 +1,6 @@
 package com.madXdesign.superofertas.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,18 +24,47 @@ import com.madXdesign.superofertas.xml.SelectosCategoriaTask;
 import com.madXdesign.superofertas.xml.SelectosOfertasTask;
 import com.madXdesign.superofertas.xml.SelectosParserXML;
 import com.madXdesign.superofertas.xml.SelectosParserXML.Categoria;
+import com.madXdesign.superofertas.xml.SelectosParserXML.Oferta;
 
 public class OfertaFragment extends ListFragment {
+    private String SELECTED_ITEM = "selectd_item";
 	
 	private SelectosOfertasTask parser;
-
+	private int selectItem = 0;
+	private OnClickOfertaListener listener;
+	
+	public interface OnClickOfertaListener {
+	    public void onClickOferta(Oferta oferta);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    if (activity instanceof OnClickOfertaListener) {
+            listener = (OnClickOfertaListener) activity;
+        }
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+	    super.onListItemClick(l, v, position, id);
+	    if(listener != null) {
+	        Oferta o =  (Oferta) getListAdapter().getItem(position);
+	        listener.onClickOferta(o);
+	    }
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		// creamos el adaptador
 		setListAdapter(new OfertaAdapter(getActivity()));
 		setListShownNoAnimation(false);
-
+		
+		if(savedInstanceState != null) {
+		    selectItem = savedInstanceState.getInt(SELECTED_ITEM);
+		}
+		
 		boolean hasTwoPanel = getResources().getBoolean(R.bool.has_two_panes);
 		if(!hasTwoPanel) {
 			setHasOptionsMenu(true);
@@ -59,11 +90,14 @@ public class OfertaFragment extends ListFragment {
             		getResources().getString(R.string.urlSS), adapter);
             task.execute();
             spinner.setAdapter(adapter);
+            spinner.setSelection(selectItem, true);
+            spinner.setSelected(true);
             spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view,
                         int position, long id) {
+                    selectItem = position;
                     Categoria a = (Categoria) spinner.getAdapter()
                     								.getItem(position);
                     refreshList(a.getNombre());
@@ -71,10 +105,16 @@ public class OfertaFragment extends ListFragment {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    
+                    //setSelection(selectItem);
                 }
             });
         }
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putInt(SELECTED_ITEM, selectItem);
 	}
 	
 	public void refreshList(String cat) {
@@ -138,7 +178,8 @@ public class OfertaFragment extends ListFragment {
 		    if(o.getPrecionNormal() == 0) {
 		        holder.precioRegular.setText(" - ");
 		    } else {
-		        holder.precioRegular.setText(Formatter.money(o.getPrecionNormal()));
+		        holder.precioRegular.setText(Formatter
+		                .money(o.getPrecionNormal()));
 		    }
 		    if(o.getAhorro() == 0) {
 		        holder.ahorro.setText(" - ");
@@ -148,7 +189,8 @@ public class OfertaFragment extends ListFragment {
 		    if(o.getPrecioOferta() == 0) {
 		        holder.precioOferta.setText(((int)o.getDescuento())+"%");
 		    } else {
-		        holder.precioOferta.setText(Formatter.money(o.getPrecioOferta()));
+		        holder.precioOferta.setText(Formatter
+		                .money(o.getPrecioOferta()));
 		    }
 		    return item;
 		}
