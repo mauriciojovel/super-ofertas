@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.madXdesign.superofertas.fragment.CarritoCompraFragment;
 import com.madXdesign.superofertas.fragment.OfertaFragment;
-import com.madXdesign.superofertas.fragment.ProductoFragment;
 import com.madXdesign.superofertas.fragment.TwoColumnsFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
@@ -31,12 +30,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 //Fragment.instantiate(f,OfertaFragment.class.getName());
             }
         } else if(position == 1) {
-            r = new CarritoCompraFragment();/*Fragment.instantiate(f
+            r = new CarritoCompraFragment();
+            /*Fragment.instantiate(f
                     , CarritoCompraFragment.class.getName());*/
-        } else {
-            r = new ProductoFragment();
-            /*Fragment.instantiate(f, ProductoFragment.class.getName());*/
-        }
+        } 
         
         return r;
     }
@@ -45,7 +42,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
 }

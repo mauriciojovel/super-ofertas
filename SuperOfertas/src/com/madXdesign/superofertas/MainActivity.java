@@ -1,5 +1,6 @@
 package com.madXdesign.superofertas;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -50,7 +51,10 @@ public class MainActivity extends ActionBarActivity
 	
     @Override
     public void onClickOferta(Oferta oferta) {
-        pager.setCurrentItem(2);
+        //pager.setCurrentItem(2);
+    	Intent i = new Intent();
+    	i.setClass(this, ProductoActivity.class);
+    	startActivity(i);
     }
 
 }

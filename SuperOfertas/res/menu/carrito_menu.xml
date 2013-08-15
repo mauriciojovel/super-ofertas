@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_carrito_compra"
-        android:orderInCategory="100"
+        android:orderInCategory="110"
         android:title="@string/carrito_compra"
         android:icon="@drawable/ic_shopping_cart"
         support:showAsAction="ifRoom"
