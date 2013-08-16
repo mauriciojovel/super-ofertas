@@ -4,4 +4,6 @@
     <color name="blanco">#ffffff</color>
     <color name="negro">#000000</color>
     <color name="gris">#AAAAAA</color>
+    <color name="negroT">#99000000</color>
+    <color name="verdeT">#99669900</color>
 </resources>

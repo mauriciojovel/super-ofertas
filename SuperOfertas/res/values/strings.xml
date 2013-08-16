@@ -9,9 +9,14 @@
     <string name="oferta">Oferta</string>
     <string name="action_filter">Filtrar</string>
     <string name="urlSS">http://168.243.106.118/deals/index.php/api/deals?version=0</string>
+    <string name="urlSSImage">http://168.243.106.118/deals/images/deals/</string>
     <string name="ahorro">Ahorro</string>
     <string name="carrito_compra">Carrito</string>
     <string name="no_hay_datos">No hay datos</string>
     <string name="title_activity_producto"></string>
+    <string name="imagen">Imagen</string>
+    <string name="fecha_vencimiento">Fecha vencimiento</string>
+    <string name="agregar">Agregar</string>
+    <string name="agregarCarritoMsg">Se agrego el producto al carrito</string>
 
 </resources>

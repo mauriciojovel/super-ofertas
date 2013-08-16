@@ -8,9 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.madXdesign.superofertas.fragment.OfertaFragment.OnClickOfertaListener;
+import com.madXdesign.superofertas.fragment.ProductoFragment;
 import com.madXdesign.superofertas.fragment.adapter.DepthPageTransformer;
 import com.madXdesign.superofertas.fragment.adapter.PagerAdapter;
-import com.madXdesign.superofertas.xml.SelectosParserXML.Oferta;
+import com.madXdesign.superofertas.xml.Oferta;
 
 public class MainActivity extends ActionBarActivity 
         implements OnClickOfertaListener{
@@ -51,9 +52,9 @@ public class MainActivity extends ActionBarActivity
 	
     @Override
     public void onClickOferta(Oferta oferta) {
-        //pager.setCurrentItem(2);
     	Intent i = new Intent();
     	i.setClass(this, ProductoActivity.class);
+    	i.putExtra(ProductoFragment.OFERTA_DATA, oferta);
     	startActivity(i);
     }
 

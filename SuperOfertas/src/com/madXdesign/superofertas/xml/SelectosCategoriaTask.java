@@ -3,12 +3,11 @@ package com.madXdesign.superofertas.xml;
 import java.io.Serializable;
 import java.util.List;
 
-import com.madXdesign.superofertas.xml.SelectosParserXML.Categoria;
-
-
 import android.os.AsyncTask;
 import android.support.v4.app.ListFragment;
 import android.widget.ArrayAdapter;
+
+import com.madXdesign.superofertas.xml.SelectosParserXML.Categoria;
 
 
 public class SelectosCategoriaTask extends AsyncTask<String, Void, List<SelectosParserXML.Categoria>> 

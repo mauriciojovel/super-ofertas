@@ -52,5 +52,13 @@
         <item name="android:textColor">@color/negro</item>
         <item name="android:textColorHighlight">@color/negro</item>
     </style>
-
+    
+    <style name="OfertaBG">
+        <item name="android:background">@drawable/background_color_shape</item>
+    </style>
+    
+    <style name="CarritoBG">
+        <item name="android:background">@drawable/background_color_inverse_shape</item>
+    </style>
+    
 </resources>

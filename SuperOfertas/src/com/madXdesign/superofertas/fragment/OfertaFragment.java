@@ -20,11 +20,11 @@ import android.widget.TextView;
 
 import com.madXdesign.superofertas.R;
 import com.madXdesign.superofertas.utils.Formatter;
+import com.madXdesign.superofertas.xml.Oferta;
 import com.madXdesign.superofertas.xml.SelectosCategoriaTask;
 import com.madXdesign.superofertas.xml.SelectosOfertasTask;
 import com.madXdesign.superofertas.xml.SelectosParserXML;
 import com.madXdesign.superofertas.xml.SelectosParserXML.Categoria;
-import com.madXdesign.superofertas.xml.SelectosParserXML.Oferta;
 
 public class OfertaFragment extends ListFragment {
     private String SELECTED_ITEM = "selectd_item";
@@ -148,7 +148,7 @@ public class OfertaFragment extends ListFragment {
 		}
 	}
 	
-	class OfertaAdapter extends ArrayAdapter<SelectosParserXML.Oferta> {
+	class OfertaAdapter extends ArrayAdapter<Oferta> {
 		public OfertaAdapter(Context context) {
 			super(context
 					, R.layout.oferta_row_layout);
@@ -158,7 +158,7 @@ public class OfertaFragment extends ListFragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 		    View item = null;
 		    OfertaViewHolder holder = null;
-		    SelectosParserXML.Oferta o = getItem(position);
+		    Oferta o = getItem(position);
 		    if(convertView == null) {
     		    LayoutInflater inflater = getActivity().getLayoutInflater();
                 item = inflater.inflate(R.layout.oferta_row_layout, null);

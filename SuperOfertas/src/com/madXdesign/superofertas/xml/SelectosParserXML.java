@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -114,11 +116,12 @@ public class SelectosParserXML
 	
 	public List<Oferta> findOfertas(String categoria) {
 		ArrayList<Oferta> ofertasList = 
-				new ArrayList<SelectosParserXML.Oferta>();
+				new ArrayList<Oferta>();
 		
 		Element root = getDocument().getDocumentElement();
 		NodeList categoriasNodes = root.getElementsByTagName(
 				SuperSelectoXML.CATEGORIAS_NODE);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		boolean searchCategoria = categoria != null 
 								&& !categoria.trim().equals("");
 		
@@ -165,6 +168,23 @@ public class SelectosParserXML
                                         SuperSelectoXML.DESCUENTO_NODE)) {
                                     oferta.setDescuento(Double.parseDouble(
                                             getText(ofertaDataNode)));
+                                } else if(ofertaDataNode.getNodeName().equals(
+                                        SuperSelectoXML.IMAGEN_NODE)) {
+                                    oferta.setImagen(
+                                            getText(ofertaDataNode));
+                                } else if(ofertaDataNode.getNodeName().equals(
+                                        SuperSelectoXML
+                                                .FECHA_VENCIMIENTO_NODE)) {
+                                    
+                                    try {
+                                        oferta.setFechaVencimiento(sdf
+                                                .parse(getText(ofertaDataNode))
+                                                );
+                                    } catch (ParseException e) {
+                                        Log.e(TAG.XML
+                                                , "Error de conversion de fecha"
+                                                ,e);
+                                    }
                                 } 
                             }
 							if(ofertaDataNodeList.getLength()>0) {
@@ -234,114 +254,5 @@ public class SelectosParserXML
 			return this.nombre + " (" + cantidad + ")";
 		}
 	}
-	
-	public class Oferta implements Serializable {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		private String titulo;
-		private String presentacion;
-		private String imagen;
-		private double precionNormal;
-		private double ahorro;
-		private double precioOferta;
-		private double descuento;
-		private Date fechaPublicacion;
-		private Date fechaVencimiento;
-		
-		public Oferta() {}
-		
-		
-		
-		public Oferta(String titulo, String presentacion, String imagen,
-				double precionNormal, double ahorro, double precioOferta,
-				double descuento, Date fechaPublicacion, Date fechaVencimiento)
-		{
-			super();
-			this.titulo = titulo;
-			this.presentacion = presentacion;
-			this.imagen = imagen;
-			this.precionNormal = precionNormal;
-			this.ahorro = ahorro;
-			this.precioOferta = precioOferta;
-			this.descuento = descuento;
-			this.fechaPublicacion = fechaPublicacion;
-			this.fechaVencimiento = fechaVencimiento;
-		}
-
-		public String getTitulo() {
-			return titulo;
-		}
-		public void setTitulo(String titulo) {
-			this.titulo = titulo;
-		}
-		public String getPresentacion() {
-			return presentacion;
-		}
-		public void setPresentacion(String presentacion) {
-			this.presentacion = presentacion;
-		}
-		public String getImagen() {
-			return imagen;
-		}
-		public void setImagen(String imagen) {
-			this.imagen = imagen;
-		}
-		public double getPrecionNormal() {
-			return precionNormal;
-		}
-		public void setPrecionNormal(double precionNormal) {
-			this.precionNormal = precionNormal;
-		}
-		public double getAhorro() {
-			return ahorro;
-		}
-		public void setAhorro(double ahorro) {
-			this.ahorro = ahorro;
-		}
-		public double getPrecioOferta() {
-			return precioOferta;
-		}
-		public void setPrecioOferta(double precioOferta) {
-			this.precioOferta = precioOferta;
-		}
-		public double getDescuento() {
-			return descuento;
-		}
-		public void setDescuento(double descuento) {
-			this.descuento = descuento;
-		}
-		public Date getFechaPublicacion() {
-			return fechaPublicacion;
-		}
-		public void setFechaPublicacion(Date fechaPublicacion) {
-			this.fechaPublicacion = fechaPublicacion;
-		}
-		public Date getFechaVencimiento() {
-			return fechaVencimiento;
-		}
-		public void setFechaVencimiento(Date fechaVencimiento) {
-			this.fechaVencimiento = fechaVencimiento;
-		}
-		
-		public int getPorcentajeDescuento() {
-		    if(precionNormal != 0) {
-		        return (int)((1-(precioOferta/precionNormal))*100);
-		    } else {
-		        return 0;
-		    }
-		}
-		
-		@Override
-		public String toString() {
-		    return titulo+" "+precioOferta+" "+" "+precionNormal
-		            +" "+ahorro+" "+getPorcentajeDescuento()+"%";
-		}
-	}
-
-	
 	
 }

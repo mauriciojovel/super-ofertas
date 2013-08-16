@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 import android.support.v4.app.ListFragment;
 import android.widget.ArrayAdapter;
 
-import com.madXdesign.superofertas.xml.SelectosParserXML.Oferta;
-
 public class SelectosOfertasTask extends AsyncTask<String, Void, List<Oferta>> 
             implements Serializable{
 
