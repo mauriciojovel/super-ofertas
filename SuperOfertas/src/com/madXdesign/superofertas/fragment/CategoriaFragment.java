@@ -19,11 +19,17 @@ public class CategoriaFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		
+		// Se ejecuta solo cuando no es una saved instance
+		if(savedInstanceState == null) {
 		// creamos el adaptador
 		parser = new SelectosCategoriaTask(getResources().getString(R.string.urlSS), this);
 		setListAdapter(new CategoriaAdapter(getActivity()));
 		setListShownNoAnimation(false);
 		parser.execute();
+		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		getListView().setItemChecked(0, true);
+		}
 	}
 	
 	@Override
@@ -39,7 +45,7 @@ public class CategoriaFragment extends ListFragment {
 	class CategoriaAdapter extends ArrayAdapter<SelectosParserXML.Categoria> {
 		public CategoriaAdapter(Context context) {
 			super(context
-					, android.R.layout.simple_list_item_1);
+					, R.layout.categoria_row_layout, android.R.id.text1);
 		}
 		
 	}

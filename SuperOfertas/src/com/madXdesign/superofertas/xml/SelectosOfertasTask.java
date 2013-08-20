@@ -41,7 +41,7 @@ public class SelectosOfertasTask extends AsyncTask<String, Void, List<Oferta>>
         @SuppressWarnings("unchecked")
         ArrayAdapter<Object> a 
                             = (ArrayAdapter<Object>) listener.getListAdapter();
-        listener.setListShownNoAnimation(true);
+        //listener.setListShownNoAnimation(true);
         a.clear();
         for (Oferta oferta : result) {
             a.add(oferta);

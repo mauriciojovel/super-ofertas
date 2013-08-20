@@ -3,11 +3,15 @@ package com.madXdesign.superofertas.fragment;
 import java.io.InputStream;
 import java.net.URL;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -158,8 +162,12 @@ public class ProductoFragment extends Fragment {
         public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
             int width = bm.getWidth();
             int height = bm.getHeight();
-            float scaleWidth = (((float) newWidth)/100.0f)*width;
-            float scaleHeight = (((float) newHeight)/100.0f)*height;
+            //float scaleWidthDP = convertPixelsToDp(width, getActivity());
+            //float scaleHeightDP = convertPixelsToDp(height, getActivity());
+            float scaleWidth = scaledImage((((float) newWidth)/100.0f)*width,getActivity());
+            float scaleHeight = scaledImage((((float) newHeight)/100.0f)*height, getActivity());
+            Log.i("t", "width: " + width +"px, "+scaleWidth+"px");
+            Log.i("t", "height: " + height +"px, "+scaleHeight+"px");
             // CREATE A MATRIX FOR THE MANIPULATION
             //Matrix matrix = new Matrix();
             // RESIZE THE BIT MAP
@@ -171,6 +179,41 @@ public class ProductoFragment extends Fragment {
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, (int)scaleWidth
                                         , (int)scaleHeight, false);
             return resizedBitmap;
+        }
+        
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. 
+         * 
+         * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+         * @param context Context to get resources and device specific display metrics
+         * @return A float value to represent px equivalent to dp depending on device density
+         */
+//        public float convertDpToPixel(float dp, Context context){
+//            Resources resources = context.getResources();
+//            DisplayMetrics metrics = resources.getDisplayMetrics();
+//            float px = dp * (metrics.densityDpi / 160f);
+//            return px;
+//        }
+
+        /**
+         * This method converts device specific pixels to density independent pixels.
+         * 
+         * @param px A value in px (pixels) unit. Which we need to convert into db
+         * @param context Context to get resources and device specific display metrics
+         * @return A float value to represent dp equivalent to px value
+         */
+//        public float convertPixelsToDp(float px, Context context){
+//            Resources resources = context.getResources();
+//            DisplayMetrics metrics = resources.getDisplayMetrics();
+//            float dp = px / (metrics.densityDpi / 160f);
+//            return dp;
+//        }
+        
+        public float scaledImage(float px, Context context) {
+            Resources resources = context.getResources();
+            DisplayMetrics metrics = resources.getDisplayMetrics();
+            float px2 = px*metrics.density+0.5f;
+            return px2;
         }
     }
 }

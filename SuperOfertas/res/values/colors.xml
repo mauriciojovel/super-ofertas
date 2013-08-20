@@ -2,8 +2,13 @@
 <resources>
     <color name="verde">#669900</color>
     <color name="blanco">#ffffff</color>
-    <color name="negro">#000000</color>
+    <color name="negro">#333333</color>
     <color name="gris">#AAAAAA</color>
     <color name="negroT">#99000000</color>
     <color name="verdeT">#99669900</color>
+    <color name="azulClaro">#E2F4FB</color>
+    <color name="azulClaro2">#8AD5F0</color>
+    <color name="azulSelect">#33B5E5</color>
+    <color name="amarilloClaro">#FFF6DF</color>
+    <color name="amarilloClaro2">#FFD060</color>
 </resources>

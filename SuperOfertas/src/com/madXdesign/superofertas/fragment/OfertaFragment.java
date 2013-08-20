@@ -33,6 +33,12 @@ public class OfertaFragment extends ListFragment {
 	private int selectItem = 0;
 	private OnClickOfertaListener listener;
 	
+	//
+//	public ListView mList;
+//	boolean mListShown;
+//	View mProgressContainer;
+//	View mListContainer;
+	
 	public interface OnClickOfertaListener {
 	    public void onClickOferta(Oferta oferta);
 	}
@@ -55,23 +61,41 @@ public class OfertaFragment extends ListFragment {
 	}
 	
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	        Bundle savedInstanceState) {
+	    //int INTERNAL_EMPTY_ID = 0x00ff0001;
+	    //if(savedInstanceState == null) {
+	    View root = inflater.inflate(R.layout.oferta_layout, container, false);
+	    
+	    //(root.findViewById(R.id.internalEmpty)).setId(INTERNAL_EMPTY_ID);
+	    //mList = (ListView) root.findViewById(android.R.id.list);
+	    //mListContainer =  root.findViewById(R.id.listContainer);
+	    //mProgressContainer = root.findViewById(R.id.progressContainer);
+	    //mListShown = true;
+	    return root;
+//	    }
+//	    else {
+//	        return super.onCreateView(inflater, container, savedInstanceState);
+//	    }
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		// creamos el adaptador
-		setListAdapter(new OfertaAdapter(getActivity()));
-		setListShownNoAnimation(false);
-		
+        setListAdapter(new OfertaAdapter(getActivity()));
+      //setListShownNoAnimation(false);
+        boolean hasTwoPanel = getResources().getBoolean(
+                R.bool.has_two_panes);
+        if (!hasTwoPanel) {
+            setHasOptionsMenu(true);
+        } else {
+//            parser = new SelectosOfertasTask(getResources().getString(
+//                    R.string.urlSS), this);
+//            parser.execute();
+        }
 		if(savedInstanceState != null) {
 		    selectItem = savedInstanceState.getInt(SELECTED_ITEM);
-		}
-		
-		boolean hasTwoPanel = getResources().getBoolean(R.bool.has_two_panes);
-		if(!hasTwoPanel) {
-			setHasOptionsMenu(true);
-		} else {
-			parser = new SelectosOfertasTask(getResources()
-					.getString(R.string.urlSS), this);
-			parser.execute();
 		}
 	}
 	
@@ -118,7 +142,7 @@ public class OfertaFragment extends ListFragment {
 	}
 	
 	public void refreshList(String cat) {
-		setListShownNoAnimation(false);
+		//setListShownNoAnimation(false);
         if(cat.equalsIgnoreCase("todos")) {
             parser = new SelectosOfertasTask(
             		getResources().getString(R.string.urlSS)
@@ -131,6 +155,39 @@ public class OfertaFragment extends ListFragment {
             parser.execute(cat);
         }
 	}
+	
+	//http://stackoverflow.com/questions/12869779/error-using-setlistshown-on-a-listfragment-with-a-custom-view
+//	public void setListShown(boolean shown, boolean animate){
+//	    if (mListShown == shown) {
+//	        return;
+//	    }
+//	    mListShown = shown;
+//	    if (shown) {
+//	        if (animate) {
+//	            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+//	                    getActivity(), android.R.anim.fade_out));
+//	            mListContainer.startAnimation(AnimationUtils.loadAnimation(
+//	                    getActivity(), android.R.anim.fade_in));
+//	        }
+//	        mProgressContainer.setVisibility(View.GONE);
+//	        mListContainer.setVisibility(View.VISIBLE);
+//	    } else {
+//	        if (animate) {
+//	            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+//	                    getActivity(), android.R.anim.fade_in));
+//	            mListContainer.startAnimation(AnimationUtils.loadAnimation(
+//	                    getActivity(), android.R.anim.fade_out));
+//	        }
+//	        mProgressContainer.setVisibility(View.VISIBLE);
+//	        mListContainer.setVisibility(View.INVISIBLE);
+//	    }
+//	}
+//	public void setListShown(boolean shown){
+//	    setListShown(shown, true);
+//	}
+//	public void setListShownNoAnimation(boolean shown) {
+//	    setListShown(shown, false);
+//	}
 	
 	class CustomArrayAdapter extends ArrayAdapter<SelectosParserXML.Categoria> {
 		public CustomArrayAdapter(Context context) {
@@ -159,8 +216,9 @@ public class OfertaFragment extends ListFragment {
 		    View item = null;
 		    OfertaViewHolder holder = null;
 		    Oferta o = getItem(position);
-		    if(convertView == null) {
-    		    LayoutInflater inflater = getActivity().getLayoutInflater();
+		    
+            if(convertView == null) {
+                LayoutInflater inflater = getActivity().getLayoutInflater();
                 item = inflater.inflate(R.layout.oferta_row_layout, null);
                 holder = new OfertaViewHolder();
                 holder.titulo = (TextView) item.findViewById(R.id.tituloTxt);
@@ -170,28 +228,29 @@ public class OfertaFragment extends ListFragment {
                 holder.precioOferta = 
                         (TextView) item.findViewById(R.id.precioOfertaTxt);
                 item.setTag(holder);
-		    } else {
-		        item = convertView;
-		        holder = (OfertaViewHolder) item.getTag();
-		    }
-		    holder.titulo.setText(firstCap(o.getTitulo()));
-		    if(o.getPrecionNormal() == 0) {
-		        holder.precioRegular.setText(" - ");
-		    } else {
-		        holder.precioRegular.setText(Formatter
-		                .money(o.getPrecionNormal()));
-		    }
-		    if(o.getAhorro() == 0) {
-		        holder.ahorro.setText(" - ");
-		    } else {
-		        holder.ahorro.setText(Formatter.money(o.getAhorro()));
-		    }
-		    if(o.getPrecioOferta() == 0) {
-		        holder.precioOferta.setText(((int)o.getDescuento())+"%");
-		    } else {
-		        holder.precioOferta.setText(Formatter
-		                .money(o.getPrecioOferta()));
-		    }
+            } else {
+                item = convertView;
+                holder = (OfertaViewHolder) item.getTag();
+            }
+            holder.titulo.setText(firstCap(o.getTitulo()));
+            if(o.getPrecionNormal() == 0) {
+                holder.precioRegular.setText(" - ");
+            } else {
+                holder.precioRegular.setText(Formatter
+                        .money(o.getPrecionNormal()));
+            }
+            if(o.getAhorro() == 0) {
+                holder.ahorro.setText(" - ");
+            } else {
+                holder.ahorro.setText(Formatter.money(o.getAhorro()));
+            }
+            if(o.getPrecioOferta() == 0) {
+                holder.precioOferta.setText(((int)o.getDescuento())+"%");
+            } else {
+                holder.precioOferta.setText(Formatter
+                        .money(o.getPrecioOferta()));
+            }
+            
 		    return item;
 		}
 		
